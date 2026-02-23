@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{{ title }} | 431103021d.ru</title>
+    <meta charset="utf-8">
+    <style>
+        body {
+            font-family: 'Courier New', monospace;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 0 20px;
+            background: #0a0a0a;
+            color: #00ff00;
+        }
+        h1 {
+            border-bottom: 2px solid #00ff00;
+            padding-bottom: 10px;
+        }
+        input, textarea {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            background: #1a1a1a;
+            border: 1px solid #00ff00;
+            color: #00ff00;
+            font-family: 'Courier New', monospace;
+        }
+        textarea {
+            min-height: 300px;
+        }
+        button {
+            background: #0a0a0a;
+            color: #00ff00;
+            border: 1px solid #00ff00;
+            padding: 10px 20px;
+            cursor: pointer;
+            font-family: 'Courier New', monospace;
+            margin-right: 10px;
+        }
+        button:hover {
+            background: #00ff00;
+            color: #0a0a0a;
+        }
+    </style>
+</head>
+<body>
+    <h1>{{ title }}</h1>
+    
+    <form method="POST">
+        {{ form.hidden_tag() }}
+        <div>
+            {{ form.title.label }}<br>
+            {{ form.title(size=64) }}
+            {% if form.title.errors %}
+                <ul>
+                {% for error in form.title.errors %}
+                    <li style="color: #ff0000;">{{ error }}</li>
+                {% endfor %}
+                </ul>
+            {% endif %}
+        </div>
+        <div>
+            {{ form.content.label }}<br>
+            {{ form.content() }}
+            {% if form.content.errors %}
+                <ul>
+                {% for error in form.content.errors %}
+                    <li style="color: #ff0000;">{{ error }}</li>
+                {% endfor %}
+                </ul>
+            {% endif %}
+        </div>
+        <button type="submit">{{ form.submit.label }}</button>
+        <a href="/admin"><button type="button">Отмена</button></a>
+    </form>
+</body>
+</html>

@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Админка | 431103021d.ru</title>
+    <meta charset="utf-8">
+    <style>
+        body {
+            font-family: 'Courier New', monospace;
+            max-width: 1000px;
+            margin: 50px auto;
+            padding: 0 20px;
+            background: #0a0a0a;
+            color: #00ff00;
+        }
+        h1 {
+            border-bottom: 2px solid #00ff00;
+            padding-bottom: 10px;
+        }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+        .button {
+            background: #0a0a0a;
+            color: #00ff00;
+            border: 1px solid #00ff00;
+            padding: 10px 20px;
+            text-decoration: none;
+            margin-right: 10px;
+        }
+        .button:hover {
+            background: #00ff00;
+            color: #0a0a0a;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            border: 1px dashed #00ff00;
+            padding: 10px;
+            text-align: left;
+        }
+        th {
+            background: #1a1a1a;
+        }
+        .flash {
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #00ff00;
+            color: #00ff00;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Управление блогом</h1>
+        <div>
+            <a href="/" class="button">На сайт</a>
+            <a href="/admin/new" class="button">Новый пост</a>
+            <a href="/logout" class="button">Выйти</a>
+        </div>
+    </div>
+    
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="flash">{{ message }}</div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+    
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Заголовок</th>
+                <th>Дата</th>
+                <th>Действия</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for post in posts %}
+            <tr>
+                <td>{{ post.id }}</td>
+                <td>{{ post.title }}</td>
+                <td>{{ post.created_at.strftime('%d.%m.%Y') }}</td>
+                <td>
+                    <a href="/admin/edit/{{ post.id }}" class="button">Редактировать</a>
+                    <form action="/admin/delete/{{ post.id }}" method="POST" style="display: inline;">
+                        <button type="submit" class="button" onclick="return confirm('Удалить пост?')">Удалить</button>
+                    </form>
+                </td>
+            </tr>
+            {% else %}
+            <tr>
+                <td colspan="4">Нет постов. <a href="/admin/new">Создать первый?</a></td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>

@@ -16,6 +16,21 @@
             border-bottom: 2px solid #00ff00;
             padding-bottom: 10px;
         }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .admin-link {
+            color: #00ff00;
+            text-decoration: none;
+            border: 1px solid #00ff00;
+            padding: 5px 15px;
+        }
+        .admin-link:hover {
+            background: #00ff00;
+            color: #0a0a0a;
+        }
         .post {
             margin: 30px 0;
             padding: 20px;
@@ -25,6 +40,10 @@
             color: #00ff00;
             font-size: 24px;
             font-weight: bold;
+            text-decoration: none;
+        }
+        .post-title:hover {
+            text-decoration: underline;
         }
         .post-date {
             color: #008800;
@@ -35,17 +54,33 @@
             margin-top: 15px;
             line-height: 1.6;
         }
+        .read-more {
+            display: inline-block;
+            margin-top: 15px;
+            color: #00ff00;
+            border: 1px solid #00ff00;
+            padding: 5px 15px;
+            text-decoration: none;
+        }
+        .read-more:hover {
+            background: #00ff00;
+            color: #0a0a0a;
+        }
     </style>
 </head>
 <body>
-    <h1>431103021d.ru</h1>
+    <div class="header">
+        <h1>431103021d.ru</h1>
+        <a href="/login" class="admin-link">Админка</a>
+    </div>
     <p>Блог о сетях, серверах и магии коммутаторов</p>
     
     {% for post in posts %}
     <div class="post">
-        <div class="post-title">{{ post.title }}</div>
+        <a href="/post/{{ post.id }}" class="post-title">{{ post.title }}</a>
         <div class="post-date">{{ post.created_at.strftime('%d %B %Y') }}</div>
-        <div class="post-content">{{ post.content }}</div>
+        <div class="post-content">{{ post.content[:200] }}{% if post.content|length > 200 %}...{% endif %}</div>
+        <a href="/post/{{ post.id }}" class="read-more">Читать далее →</a>
     </div>
     {% else %}
     <p>Пока нет постов. Скоро появятся!</p>

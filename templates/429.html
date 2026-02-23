@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Хорошая попытка | 431103021d.ru</title>
+    <meta charset="utf-8">
+    <style>
+        body {
+            font-family: 'Courier New', monospace;
+            background: #0a0a0a;
+            color: #00ff00;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            text-align: center;
+            max-width: 600px;
+        }
+        h1 {
+            font-size: 3em;
+            margin-bottom: 10px;
+            text-shadow: 0 0 10px #00ff00;
+        }
+        .subtitle {
+            font-size: 1.5em;
+            margin-bottom: 30px;
+            color: #008800;
+        }
+        img {
+            max-width: 100%;
+            border: 3px solid #00ff00;
+            border-radius: 10px;
+            box-shadow: 0 0 20px #00ff00;
+            margin-bottom: 30px;
+        }
+        .message {
+            font-size: 2em;
+            color: #ff0000;
+            margin: 20px 0;
+            border: 2px dashed #ff0000;
+            padding: 15px;
+            animation: blink 1.5s infinite;
+        }
+        @keyframes blink {
+            0% { opacity: 1; }
+            50% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+        .counter {
+            font-size: 1.2em;
+            color: #888;
+            margin: 20px 0;
+        }
+        a {
+            color: #00ff00;
+            text-decoration: none;
+            border: 1px solid #00ff00;
+            padding: 10px 30px;
+            display: inline-block;
+            margin-top: 20px;
+            transition: 0.3s;
+        }
+        a:hover {
+            background: #00ff00;
+            color: #0a0a0a;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>429</h1>
+        <div class="subtitle">Слишком много попыток</div>
+        
+        <!-- Твоя картинка -->
+        <img src="{{ url_for('static', filename='images/429.jpeg') }}" 
+             alt="Хорошая попытка">
+        
+        <div class="message">
+            ХОРОШАЯ ПОПЫТКА<br>
+            НО НЕТ
+        </div>
+        
+        <div class="counter">
+            Подожди немного, прежде чем снова пробовать
+        </div>
+        
+        <a href="{{ url_for('login') }}">← Попробовать снова</a>
+    </div>
+</body>
+</html>
