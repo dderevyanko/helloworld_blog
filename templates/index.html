@@ -79,7 +79,7 @@
     <div class="post">
         <a href="/post/{{ post.id }}" class="post-title">{{ post.title }}</a>
         <div class="post-date">{{ post.created_at.strftime('%d %B %Y') }}</div>
-        <div class="post-content">{{ post.content[:200] }}{% if post.content|length > 200 %}...{% endif %}</div>
+        <div class="post-content">{{ post.preview|safe }}</div>
         <a href="/post/{{ post.id }}" class="read-more">Читать далее →</a>
     </div>
     {% else %}

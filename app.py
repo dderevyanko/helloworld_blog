@@ -1,7 +1,9 @@
 import os
 import logging
 from datetime import datetime
-
+import html
+import markdown
+import re
 from dotenv import load_dotenv
 load_dotenv()
 
@@ -55,6 +57,29 @@ login_manager = LoginManager(app)
 login_manager.login_view = 'login'
 login_manager.login_message = ',      '
 
+def get_preview(text, length=200):
+    """Умный предпросмотр с Markdown"""
+    if not text:
+        return ""
+    
+    # Если текст короткий - просто конвертируем
+    if len(text) <= length:
+        return markdown.markdown(text)
+    
+    # Ищем безопасное место для обрезки
+    truncated = text[:length]
+    
+    # Проверяем, не обрезали ли мы внутри ```css блока
+    code_block_start = truncated.rfind('```')
+    if code_block_start > length - 50:  # Если обрезали внутри блока
+        # Обрезаем до начала блока
+        truncated = text[:code_block_start]
+    
+    # Добавляем многоточие
+    truncated += "\n\n*...*"
+    
+    return markdown.markdown(truncated)
+
 # Flask-Limiter c Redis (или другим внешним бекендом) для работы с несколькими воркерами[web:4][web:10][web:18]
 limiter = Limiter(
     key_func=get_remote_address,
@@ -103,6 +128,14 @@ class PostForm(FlaskForm):
     submit = SubmitField('')
 
 
+def convert_markdown(text):
+    """Конвертирует Markdown в HTML с поддержкой кода"""
+    if not text:
+        return ""
+    # Базовое расширение для таблиц, кода и т.д.
+    md = markdown.Markdown(extensions=['extra', 'codehilite', 'tables', 'fenced_code'])
+    return md.convert(text)
+
 # ====== Инициализация БД и тестовых данных ======
 
 with app.app_context():
@@ -145,14 +178,15 @@ def admin_login_key():
 @app.route("/")
 def home():
     posts = Post.query.order_by(Post.created_at.desc()).all()
+    for post in posts:
+        post.preview = get_preview(post.content, length=200)
     return render_template('index.html', posts=posts)
-
 
 @app.route("/post/<int:post_id>")
 def show_post(post_id):
     post = Post.query.get_or_404(post_id)
-    return render_template('post.html', post=post)
-
+    # Конвертируем Markdown в HTML прямо в шаблоне
+    return render_template('post.html', post=post, convert_markdown=convert_markdown)
 
 # Лимит только для неудачных попыток логина администратора[web:5][web:4]
 @app.route('/login', methods=['GET', 'POST'])
