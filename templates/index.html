@@ -66,6 +66,55 @@
             background: #00ff00;
             color: #0a0a0a;
         }
+
+    /* Терминальный подвал */
+    .terminal-footer {
+        margin-top: 60px;
+        padding: 20px;
+        background: #0d0d0d;
+        border: 1px solid #00ff00;
+        border-radius: 5px;
+        font-family: 'Courier New', monospace;
+    }
+    .terminal-line {
+        margin-bottom: 8px;
+    }
+    .prompt {
+        color: #00ff00;
+        font-weight: bold;
+        margin-right: 10px;
+    }
+    .command {
+        color: #0088ff;
+    }
+    .terminal-output {
+        color: #ffff00;
+        margin-left: 20px;
+        margin-bottom: 15px;
+        padding-left: 10px;
+        border-left: 2px solid #00ff00;
+    }
+    .terminal-cursor {
+        margin-bottom: 15px;
+    }
+    .blinking-cursor {
+        color: #00ff00;
+        animation: blink 1s step-end infinite;
+    }
+    @keyframes blink {
+        0%, 100% { opacity: 1; }
+        50% { opacity: 0; }
+    }
+    .terminal-copyright {
+        border-top: 1px dashed #00ff00;
+        padding-top: 15px;
+        margin-top: 10px;
+    }
+    .comment {
+        color: #008800;
+        font-style: italic;
+    }
+
     </style>
 </head>
 <body>
@@ -74,7 +123,7 @@
         <a href="/login" class="admin-link">Админка</a>
     </div>
     <p>Блог о сетях, серверах и магии коммутаторов</p>
-    
+
     {% for post in posts %}
     <div class="post">
         <a href="/post/{{ post.id }}" class="post-title">{{ post.title }}</a>
@@ -85,5 +134,25 @@
     {% else %}
     <p>Пока нет постов. Скоро появятся!</p>
     {% endfor %}
+
+    <!-- Терминальный подвал с контактом -->
+<!-- Терминальный подвал с контактом -->
+<div class="terminal-footer">
+    <div class="terminal-line">
+        <span class="prompt">user@blog:~$</span>
+        <span class="command">./feedback.sh</span>
+    </div>
+    <div class="terminal-output">
+        → feedback@hello-blog.ru
+    </div>
+    <div class="terminal-cursor">
+        <span class="prompt">user@blog:~$</span>
+        <span class="blinking-cursor">_</span>
+    </div>
+    <div class="terminal-copyright">
+        <span class="comment"># 431103021d.ru · 2026</span>
+    </div>
+</div>
+
 </body>
 </html>
