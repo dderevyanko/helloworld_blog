@@ -67,69 +67,130 @@
             color: #0a0a0a;
         }
 
-    /* Терминальный подвал */
-    .terminal-footer {
-        margin-top: 60px;
-        padding: 20px;
-        background: #0d0d0d;
-        border: 1px solid #00ff00;
-        border-radius: 5px;
-        font-family: 'Courier New', monospace;
-    }
-    .terminal-line {
-        margin-bottom: 8px;
-    }
-    .prompt {
-        color: #00ff00;
-        font-weight: bold;
-        margin-right: 10px;
-    }
-    .command {
-        color: #0088ff;
-    }
-    .terminal-output {
-        color: #ffff00;
-        margin-left: 20px;
-        margin-bottom: 15px;
-        padding-left: 10px;
-        border-left: 2px solid #00ff00;
-    }
-    .terminal-cursor {
-        margin-bottom: 15px;
-    }
-    .blinking-cursor {
-        color: #00ff00;
-        animation: blink 1s step-end infinite;
-    }
-    @keyframes blink {
-        0%, 100% { opacity: 1; }
-        50% { opacity: 0; }
-    }
-    .terminal-copyright {
-        border-top: 1px dashed #00ff00;
-        padding-top: 15px;
-        margin-top: 10px;
-    }
-    .comment {
-        color: #008800;
-        font-style: italic;
-    }
-    /* Адаптивность для мобильных устройств */
-    @media (max-width: 768px) {
-        body {
-            margin: 20px auto;
-            padding: 0 15px;
-        }
-        .post-title {
-            font-size: 18px;
-        }
+        /* Терминальный подвал — общий стиль */
         .terminal-footer {
-            padding: 15px;
+            margin-top: 60px;
+            padding: 20px;
+            background: #0d0d0d;
+            border: 1px solid #00ff00;
+            border-radius: 5px;
+            font-family: 'Courier New', monospace;
+            position: relative;
+            overflow: hidden;
         }
+
+        /* Общий стиль для всех приглашений */
+        .terminal-footer .prompt {
+            color: #00ff00;
+            font-weight: bold;
+            margin-right: 10px;
+            text-shadow: none;
+            opacity: 1;
+        }
+
         .terminal-line {
-            font-size: 12px;
+            margin-bottom: 8px;
         }
-    }
+
+        .command {
+            color: #0088ff;
+        }
+
+        .terminal-output {
+            color: #ffff00;
+            margin-left: 20px;
+            margin-bottom: 15px;
+            padding-left: 10px;
+            border-left: 2px solid #00ff00;
+        }
+
+        .terminal-output.error {
+            color: #ff0000;
+            border-left-color: #ff0000;
+        }
+
+        /* Ссылка на email */
+        .terminal-output .email-link {
+            color: #ffff00;
+            text-decoration: none;
+            border-bottom: 1px dashed #ffff00;
+            cursor: text;
+            user-select: text;
+        }
+
+        .terminal-output .email-link:hover {
+            border-bottom-style: solid;
+        }
+
+        .blinking-cursor {
+            color: #00ff00;
+            animation: blink 1s step-end infinite;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
+
+        .terminal-copyright {
+            border-top: 1px dashed #00ff00;
+            padding-top: 15px;
+            margin-top: 10px;
+        }
+
+        .comment {
+            color: #008800;
+            font-style: italic;
+        }
+
+        /* Адаптивность для мобильных устройств */
+        @media (max-width: 768px) {
+            body {
+                margin: 20px auto;
+                padding: 0 15px;
+            }
+            .post-title {
+                font-size: 18px;
+            }
+            .terminal-footer {
+                padding: 15px;
+            }
+            .terminal-line {
+                font-size: 12px;
+            }
+        }
+
+        /* Растр (scanlines) — на весь подвал */
+        .terminal-footer::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: repeating-linear-gradient(
+                0deg,
+                rgba(0, 0, 0, 0.15) 0px,
+                rgba(0, 0, 0, 0.15) 2px,
+                transparent 2px,
+                transparent 4px
+            );
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        /* Виньетка (затемнение краёв) — только для подвала */
+        .terminal-footer::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            box-shadow: inset 0 0 50px rgba(0, 0, 0, 0.6);
+            pointer-events: none;
+            z-index: 2;
+        }
     </style>
 </head>
 <body>
@@ -150,23 +211,91 @@
     <p>Пока нет постов. Скоро появятся!</p>
     {% endfor %}
 
-<!-- Терминальный подвал с контактом -->
-<div class="terminal-footer">
-    <div class="terminal-line">
-        <span class="prompt">user@blog:~$</span>
-        <span class="command">./feedback.sh</span>
+    <!-- Терминальный подвал с контактом -->
+    <div class="terminal-footer">
+        <div class="terminal-line">
+            <span class="prompt">root@blog:~$</span>
+            <span class="command">./feedback.sh</span>
+        </div>
+        <div class="terminal-output">
+            → <a href="mailto:feedback@hello-blog.ru" class="email-link">feedback@hello-blog.ru</a>
+        </div>
     </div>
-    <div class="terminal-output">
-        → feedback@hello-blog.ru
-    </div>
-    <div class="terminal-cursor">
-        <span class="prompt">user@blog:~$</span>
-        <span class="blinking-cursor">_</span>
-    </div>
-    <div class="terminal-copyright">
-        <span class="comment"># 431103021d.ru · 2026</span>
-    </div>
-</div>
 
+    <script>
+        (function() {
+            // Находим контейнер подвала
+            const footer = document.querySelector('.terminal-footer');
+            if (!footer) return;
+
+            // Создаём интерактивную строку (приглашение user)
+            const inputLine = document.createElement('div');
+            inputLine.className = 'terminal-line interactive';
+            inputLine.innerHTML = '<span class="prompt">user@blog:~$</span> <span class="cmd-input"></span><span class="blinking-cursor">_</span>';
+
+            // Добавляем поле ввода
+            const hiddenInput = document.createElement('input');
+            hiddenInput.type = 'text';
+            hiddenInput.style.position = 'absolute';
+            hiddenInput.style.left = '-9999px';
+            hiddenInput.style.opacity = '0';
+            document.body.appendChild(hiddenInput);
+
+            // Фокусируемся на скрытом поле при клике на подвал
+            footer.addEventListener('click', () => {
+                hiddenInput.focus();
+            });
+
+            // Обновляем отображаемый текст
+            const cmdSpan = inputLine.querySelector('.cmd-input');
+
+            hiddenInput.addEventListener('input', () => {
+                cmdSpan.textContent = hiddenInput.value;
+            });
+
+            // Обработка ввода
+            hiddenInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    const command = hiddenInput.value.trim();
+                    if (command !== '') {
+                        // Создаём строку с введённой командой
+                        const historyLine = document.createElement('div');
+                        historyLine.className = 'terminal-line';
+                        historyLine.innerHTML = '<span class="prompt">user@blog:~$</span> ' + command;
+                        footer.insertBefore(historyLine, inputLine);
+
+                        // Создаём ответ "Permission denied"
+                        const errorLine = document.createElement('div');
+                        errorLine.className = 'terminal-output error';
+                        errorLine.innerHTML = '→ Permission denied';
+                        footer.insertBefore(errorLine, inputLine);
+
+                        // Очищаем поле ввода
+                        hiddenInput.value = '';
+                        cmdSpan.textContent = '';
+
+                        // Прокручиваем подвал вниз
+                        footer.scrollIntoView({ behavior: 'smooth', block: 'end' });
+                    }
+                }
+            });
+
+            // Добавляем интерактивную строку в подвал
+            footer.appendChild(inputLine);
+
+            // Удаляем старый курсор, если был
+            const oldCursor = footer.querySelector('.terminal-cursor');
+            if (oldCursor) oldCursor.remove();
+
+            // Добавляем дату в самый низ (после интерактивной строки)
+            const copyrightDiv = document.createElement('div');
+            copyrightDiv.className = 'terminal-copyright';
+            copyrightDiv.innerHTML = '<span class="comment"># 431103021d.ru · 2026</span>';
+            footer.appendChild(copyrightDiv);
+
+            // Автофокус при загрузке
+            setTimeout(() => hiddenInput.focus(), 100);
+        })();
+    </script>
 </body>
 </html>
